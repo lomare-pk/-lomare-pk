@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'OMARE.PK — Luxury Fashion for Men & Women</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A96E;
+    --gold-light: #E8D5A3;
+    --gold-dark: #8B6914;
+    --black: #0A0A0A;
+    --off-white: #F8F5F0;
+    --cream: #EDE8DF;
+    --gray-dark: #1A1A1A;
+    --gray-mid: #333333;
+    --gray-text: #888888;
+    --white: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--black);
+    color: var(--off-white);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%, -50%);
+    transition: left 0.12s ease-out, top 0.12s ease-out, transform 0.3s, width 0.3s, height 0.3s;
+    opacity: 0.6;
+  }
+  body:has(a:hover) .cursor-ring,
+  body:has(button:hover) .cursor-ring { transform: translate(-50%,-50%) scale(1.8); opacity: 1; }
+
+  /* LOADER */
+  #loader {
+    position: fixed; inset: 0;
+    background: var(--black);
+    z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 24px;
+    transition: opacity 0.8s, visibility 0.8s;
+  }
+  #loader.hide { opacity: 0; visibility: hidden; }
+  .loader-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    letter-spacing: 12px;
+    color: var(--gold);
+    animation: fadeIn 1s ease;
+  }
+  .loader-bar {
+    width: 200px; height: 1px;
+    background: var(--gray-mid);
+    position: relative; overflow: hidden;
+  }
+  .loader-bar::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold);
+    transform: translateX(-100%);
+    animation: barLoad 2s ease forwards;
+  }
+  @keyframes barLoad { to { transform: translateX(0); } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 24px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.5s, padding 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.96);
+    backdrop-filter: blur(20px);
+    padding: 16px 60px;
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    letter-spacing: 6px;
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 300;
+  }
+  .nav-logo span { font-style: italic; }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    color: var(--off-white);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 300;
+    position: relative;
+    transition: color 0.3s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-right { display: flex; align-items: center; gap: 28px; }
+  .nav-icon {
+    color: var(--off-white); text-decoration: none;
+    font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 300;
+    transition: color 0.3s;
+    background: none; border: none; cursor: none;
+  }
+  .nav-icon:hover { color: var(--gold); }
+  .cart-btn {
+    background: var(--gold);
+    color: var(--black);
+    border: none; padding: 10px 24px;
+    font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; font-weight: 500;
+    cursor: none; transition: background 0.3s, transform 0.2s;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .cart-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* HAMBURGER */
+  .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: none; padding: 4px; }
+  .hamburger span { display: block; width: 24px; height: 1px; background: var(--gold); transition: all 0.3s; }
+
+  /* HERO */
+  #hero {
+    height: 100vh; min-height: 700px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #0A0A0A 0%, #1A1208 50%, #0A0A0A 100%);
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(201,169,110,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 30%, rgba(201,169,110,0.04) 0%, transparent 50%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(201,169,110,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,169,110,0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  .hero-content {
+    text-align: center; z-index: 2;
+    animation: heroReveal 1.5s ease 2.5s both;
+    padding: 0 20px;
+  }
+  @keyframes heroReveal {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-eyebrow {
+    font-size: 10px; letter-spacing: 8px;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 300; margin-bottom: 32px;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(72px, 12vw, 160px);
+    font-weight: 300; line-height: 0.9;
+    letter-spacing: -2px; color: var(--off-white);
+    margin-bottom: 8px;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(20px, 4vw, 42px);
+    font-weight: 300; letter-spacing: 16px;
+    text-transform: uppercase; color: rgba(248,245,240,0.5);
+    margin-bottom: 60px;
+  }
+  .hero-cta { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold); color: var(--black);
+    padding: 16px 48px; font-size: 10px;
+    letter-spacing: 4px; text-transform: uppercase;
+    font-weight: 500; text-decoration: none;
+    transition: all 0.3s; display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .btn-primary:hover { background: var(--off-white); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--off-white);
+    padding: 15px 48px; font-size: 10px;
+    letter-spacing: 4px; text-transform: uppercase;
+    font-weight: 300; text-decoration: none;
+    border: 1px solid rgba(248,245,240,0.3);
+    transition: all 0.3s; display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--gray-text); font-size: 9px; letter-spacing: 3px;
+    text-transform: uppercase; animation: bounce 2s ease infinite;
+  }
+  .hero-scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--gold), transparent); }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    background: var(--gold);
+    padding: 16px 0; overflow: hidden;
+    border-top: none; border-bottom: none;
+  }
+  .marquee-track {
+    display: flex; gap: 0;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-track span {
+    font-size: 10px; letter-spacing: 5px;
+    text-transform: uppercase; color: var(--black);
+    font-weight: 500; padding: 0 40px;
+  }
+  .marquee-sep { color: var(--black); opacity: 0.4; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* SECTION BASE */
+  section { padding: 120px 60px; }
+  .section-label {
+    font-size: 9px; letter-spacing: 5px;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 400; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .section-label::before {
+    content: ''; width: 32px; height: 1px; background: var(--gold);
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 300; line-height: 1.1;
+    color: var(--off-white);
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  /* CATEGORIES */
+  #categories { padding: 80px 60px; }
+  .cat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px; margin-top: 60px;
+  }
+  .cat-card {
+    position: relative; overflow: hidden;
+    height: 600px; cursor: none;
+  }
+  .cat-card:first-child { grid-row: span 2; height: 100%; }
+  .cat-bg {
+    position: absolute; inset: 0;
+    transition: transform 0.8s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cat-card:hover .cat-bg { transform: scale(1.05); }
+  .cat-bg-men { background: linear-gradient(160deg, #1A1208 0%, #0D0D0D 40%, #1A1510 100%); }
+  .cat-bg-women { background: linear-gradient(160deg, #120A08 0%, #0D0D0D 40%, #100A0A 100%); }
+  .cat-bg-accessories { background: linear-gradient(160deg, #080D12 0%, #0D0D0D 40%, #080A10 100%); }
+  .cat-bg-new { background: linear-gradient(160deg, #0A0A0A 0%, #141008 40%, #0A0A0A 100%); }
+  .cat-figure {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 200px; font-weight: 300;
+    color: rgba(201,169,110,0.04);
+    user-select: none; line-height: 1;
+    transition: color 0.5s;
+  }
+  .cat-card:hover .cat-figure { color: rgba(201,169,110,0.08); }
+  .cat-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 40px 36px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+  }
+  .cat-tag {
+    font-size: 9px; letter-spacing: 4px; color: var(--gold);
+    text-transform: uppercase; font-weight: 300;
+    margin-bottom: 10px; display: block;
+  }
+  .cat-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px; font-weight: 300;
+    color: var(--off-white); line-height: 1;
+    margin-bottom: 16px;
+  }
+  .cat-link {
+    font-size: 9px; letter-spacing: 3px; color: var(--gold);
+    text-transform: uppercase; text-decoration: none;
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 400; transition: gap 0.3s;
+  }
+  .cat-link:hover { gap: 20px; }
+  .cat-link::after { content: '→'; font-size: 14px; }
+  .cat-overlay {
+    position: absolute; inset: 0;
+    border: 1px solid transparent;
+    transition: border-color 0.4s;
+    pointer-events: none;
+  }
+  .cat-card:hover .cat-overlay { border-color: rgba(201,169,110,0.2); }
+
+  /* FEATURED COLLECTION */
+  #collection { background: var(--gray-dark); }
+  .collection-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 60px;
+  }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .product-card {
+    cursor: none; position: relative; group: true;
+  }
+  .product-img {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #1A1A1A, #111);
+    height: 420px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .product-placeholder {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 12px;
+  }
+  .product-icon {
+    width: 60px; height: 60px; opacity: 0.15;
+  }
+  .product-glyph {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px; color: var(--gold);
+    opacity: 0.12; user-select: none;
+    transition: opacity 0.5s;
+  }
+  .product-card:hover .product-glyph { opacity: 0.22; }
+  .product-actions {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 20px;
+    display: flex; gap: 8px;
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  }
+  .product-card:hover .product-actions { transform: translateY(0); }
+  .add-to-cart {
+    flex: 1; background: var(--gold);
+    color: var(--black); border: none;
+    padding: 12px; font-size: 9px;
+    letter-spacing: 3px; text-transform: uppercase;
+    font-weight: 500; cursor: none;
+    font-family: 'Montserrat', sans-serif;
+    transition: background 0.3s;
+  }
+  .add-to-cart:hover { background: var(--gold-light); }
+  .wishlist-btn {
+    width: 44px; background: rgba(0,0,0,0.7);
+    color: var(--off-white); border: 1px solid rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    cursor: none; transition: all 0.3s; font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .wishlist-btn:hover { background: var(--gold); color: var(--black); border-color: var(--gold); }
+  .product-badge {
+    position: absolute; top: 16px; left: 16px;
+    background: var(--gold); color: var(--black);
+    font-size: 8px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 500;
+    padding: 4px 10px;
+  }
+  .product-badge.new-badge { background: var(--off-white); }
+  .product-badge.sale-badge { background: #8B1A1A; color: var(--off-white); }
+  .product-info { padding: 0 4px; }
+  .product-brand {
+    font-size: 8px; letter-spacing: 3px;
+    color: var(--gold); text-transform: uppercase;
+    font-weight: 300; margin-bottom: 6px;
+  }
+  .product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 300;
+    color: var(--off-white); margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .product-price-row {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .product-price {
+    font-size: 16px; color: var(--gold); font-weight: 300;
+  }
+  .product-price-old {
+    font-size: 13px; color: var(--gray-text);
+    text-decoration: line-through; font-weight: 300;
+  }
+  .product-colors {
+    display: flex; gap: 6px; margin-top: 10px;
+  }
+  .color-swatch {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: none; transition: transform 0.2s;
+  }
+  .color-swatch:hover { transform: scale(1.3); }
+
+  /* BRANDS STRIP */
+  .view-all-link {
+    font-size: 10px; letter-spacing: 3px;
+    color: var(--gold); text-decoration: none;
+    text-transform: uppercase; font-weight: 300;
+    display: flex; align-items: center; gap: 12px;
+    transition: gap 0.3s;
+  }
+  .view-all-link::after { content: '→'; font-size: 14px; }
+  .view-all-link:hover { gap: 20px; }
+
+  /* LOOKBOOK */
+  #lookbook {
+    padding: 0; background: var(--black);
+    display: grid; grid-template-columns: 1fr 1fr;
+    min-height: 700px;
+  }
+  .lookbook-visual {
+    background: linear-gradient(135deg, #1A1510 0%, #0A0A0A 50%, #100A08 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden; min-height: 700px;
+  }
+  .lookbook-pattern {
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(201,169,110,0.02) 40px,
+      rgba(201,169,110,0.02) 41px
+    );
+  }
+  .lookbook-glyph {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 280px; color: rgba(201,169,110,0.06);
+    user-select: none; line-height: 1;
+    position: absolute;
+  }
+  .lookbook-label {
+    z-index: 2; text-align: center;
+  }
+  .lookbook-season {
+    font-size: 9px; letter-spacing: 8px;
+    color: var(--gold); text-transform: uppercase;
+    font-weight: 300; margin-bottom: 16px;
+  }
+  .lookbook-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px; font-weight: 300;
+    color: var(--off-white); line-height: 1;
+  }
+  .lookbook-content {
+    padding: 80px 80px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+  }
+  .lookbook-content .section-label { margin-bottom: 32px; }
+  .lookbook-content .section-title { font-size: clamp(32px, 4vw, 52px); margin-bottom: 24px; }
+  .lookbook-text {
+    font-size: 14px; line-height: 2;
+    color: var(--gray-text); font-weight: 300;
+    max-width: 420px; margin-bottom: 48px;
+  }
+  .lookbook-stats {
+    display: flex; gap: 40px; margin-bottom: 48px;
+    padding-top: 40px; border-top: 1px solid rgba(201,169,110,0.1);
+  }
+  .stat-item { display: flex; flex-direction: column; gap: 6px; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 44px; font-weight: 300; color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 9px; letter-spacing: 3px;
+    color: var(--gray-text); text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  /* TESTIMONIALS */
+  #testimonials { background: var(--off-white); color: var(--black); padding: 120px 60px; }
+  #testimonials .section-label { color: var(--gold-dark); }
+  #testimonials .section-label::before { background: var(--gold-dark); }
+  #testimonials .section-title { color: var(--black); }
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; margin-top: 60px;
+  }
+  .testimonial-card {
+    background: var(--cream); padding: 48px 40px;
+    position: relative;
+  }
+  .testimonial-card:first-child {
+    background: var(--black); color: var(--off-white);
+  }
+  .quote-mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px; color: var(--gold);
+    line-height: 0.6; margin-bottom: 32px;
+    display: block; font-weight: 300;
+  }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 300;
+    line-height: 1.7; margin-bottom: 32px;
+    color: inherit;
+  }
+  .testimonial-card:not(:first-child) .testimonial-text { color: var(--gray-mid); }
+  .testimonial-author {
+    display: flex; align-items: center; gap: 16px;
+  }
+  .author-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--gold); display: flex;
+    align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; color: var(--black);
+  }
+  .author-name {
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 1px; margin-bottom: 2px;
+  }
+  .author-meta {
+    font-size: 10px; letter-spacing: 2px;
+    color: var(--gray-text); text-transform: uppercase;
+  }
+  .testimonial-card:first-child .author-meta { color: rgba(248,245,240,0.4); }
+  .stars { color: var(--gold); font-size: 12px; letter-spacing: 2px; margin-bottom: 20px; }
+
+  /* NEWSLETTER */
+  #newsletter {
+    background: linear-gradient(135deg, #1A1208 0%, #0A0A0A 50%, #1A1208 100%);
+    padding: 120px 60px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .newsletter-bg {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 30% 50%, rgba(201,169,110,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 50%, rgba(201,169,110,0.05) 0%, transparent 50%);
+  }
+  .newsletter-content { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; }
+  .newsletter-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 300; margin-bottom: 16px;
+    color: var(--off-white);
+  }
+  .newsletter-title em { font-style: italic; color: var(--gold); }
+  .newsletter-sub {
+    font-size: 13px; color: var(--gray-text);
+    font-weight: 300; line-height: 1.8;
+    margin-bottom: 48px; letter-spacing: 0.5px;
+  }
+  .newsletter-form {
+    display: flex; gap: 0; max-width: 480px; margin: 0 auto 16px;
+  }
+  .newsletter-input {
+    flex: 1; background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(201,169,110,0.2);
+    border-right: none; color: var(--off-white);
+    padding: 16px 24px; font-size: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300; outline: none;
+    transition: border-color 0.3s;
+  }
+  .newsletter-input:focus { border-color: var(--gold); }
+  .newsletter-input::placeholder { color: var(--gray-text); }
+  .newsletter-submit {
+    background: var(--gold); color: var(--black);
+    border: none; padding: 16px 32px;
+    font-size: 9px; letter-spacing: 3px;
+    text-transform: uppercase; font-weight: 500;
+    cursor: none; font-family: 'Montserrat', sans-serif;
+    transition: background 0.3s;
+    white-space: nowrap;
+  }
+  .newsletter-submit:hover { background: var(--gold-light); }
+  .newsletter-privacy {
+    font-size: 9px; color: var(--gray-text);
+    letter-spacing: 1px;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #050505;
+    border-top: 1px solid rgba(201,169,110,0.1);
+    padding: 80px 60px 40px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px; margin-bottom: 60px;
+  }
+  .footer-brand .nav-logo {
+    display: block; margin-bottom: 20px; font-size: 28px;
+  }
+  .footer-tagline {
+    font-size: 12px; color: var(--gray-text);
+    font-weight: 300; line-height: 1.8; max-width: 260px;
+    margin-bottom: 28px; font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 15px;
+  }
+  .social-links { display: flex; gap: 16px; }
+  .social-link {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,169,110,0.2);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gray-text); text-decoration: none;
+    font-size: 11px; transition: all 0.3s; font-weight: 500;
+  }
+  .social-link:hover { border-color: var(--gold); color: var(--gold); }
+  .footer-col-title {
+    font-size: 9px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 400; margin-bottom: 24px;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-links a {
+    color: var(--gray-text); text-decoration: none;
+    font-size: 12px; font-weight: 300; letter-spacing: 0.5px;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-contact { display: flex; flex-direction: column; gap: 12px; }
+  .contact-item {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .contact-label {
+    font-size: 8px; letter-spacing: 3px;
+    color: var(--gold); text-transform: uppercase;
+  }
+  .contact-val {
+    font-size: 12px; color: var(--gray-text); font-weight: 300;
+  }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.04);
+    padding-top: 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-copy {
+    font-size: 10px; color: rgba(136,136,136,0.5);
+    letter-spacing: 1px; font-weight: 300;
+  }
+  .footer-legal {
+    display: flex; gap: 24px; list-style: none;
+  }
+  .footer-legal a {
+    font-size: 10px; color: rgba(136,136,136,0.5);
+    text-decoration: none; letter-spacing: 1px;
+    transition: color 0.3s;
+  }
+  .footer-legal a:hover { color: var(--gold); }
+  .footer-pk-flag {
+    font-size: 10px; color: rgba(136,136,136,0.5);
+    letter-spacing: 1px;
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .filter-btn {
+    background: transparent; border: 1px solid rgba(201,169,110,0.2);
+    color: var(--gray-text); padding: 8px 20px;
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    cursor: none; font-family: 'Montserrat', sans-serif;
+    font-weight: 300; transition: all 0.3s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--gold); color: var(--black);
+    border-color: var(--gold);
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* MOBILE NAV OVERLAY */
+  .mobile-nav {
+    position: fixed; inset: 0; background: var(--black);
+    z-index: 9000; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 32px;
+    transform: translateX(100%); transition: transform 0.5s ease;
+  }
+  .mobile-nav.open { transform: translateX(0); }
+  .mobile-nav a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; color: var(--off-white);
+    text-decoration: none; letter-spacing: 4px;
+    font-weight: 300; transition: color 0.3s;
+  }
+  .mobile-nav a:hover { color: var(--gold); }
+  .mobile-close {
+    position: absolute; top: 24px; right: 24px;
+    background: none; border: none; color: var(--gold);
+    font-size: 24px; cursor: none;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  /* GOLD LINE ACCENT */
+  .gold-line {
+    width: 60px; height: 1px; background: var(--gold);
+    margin: 32px 0;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .cat-grid { grid-template-columns: 1fr 1fr; }
+    .cat-card:first-child { grid-row: span 1; height: 500px; }
+    .cat-card { height: 400px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    nav.scrolled { padding: 14px 24px; }
+    .nav-links, .nav-right .nav-icon:not(.cart-btn) { display: none; }
+    .hamburger { display: flex; }
+    section { padding: 80px 24px; }
+    #categories { padding: 60px 24px; }
+    .cat-grid { grid-template-columns: 1fr; }
+    .cat-card { height: 380px; }
+    .cat-card:first-child { height: 380px; }
+    .collection-header { flex-direction: column; align-items: flex-start; gap: 24px; }
+    .products-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .product-img { height: 280px; }
+    #lookbook { grid-template-columns: 1fr; }
+    .lookbook-visual { min-height: 400px; }
+    .lookbook-content { padding: 60px 24px; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .newsletter-form { flex-direction: column; }
+    .newsletter-input { border-right: 1px solid rgba(201,169,110,0.2); border-bottom: none; }
+    .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .lookbook-stats { gap: 24px; }
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-brand">L'OMARE</div>
+  <div class="loader-bar"></div>
+  <div style="font-size:9px;letter-spacing:4px;color:var(--gray-text);text-transform:uppercase;font-weight:300;">Pakistan's Finest Fashion</div>
+</div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()">✕</button>
+  <a href="#categories">Collections</a>
+  <a href="#collection">Men</a>
+  <a href="#lookbook">Women</a>
+  <a href="#testimonials">About</a>
+  <a href="#newsletter">Contact</a>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo"><span>L'</span>OMARE<span style="font-size:12px;letter-spacing:3px;opacity:0.6">.PK</span></a>
+  <ul class="nav-links">
+    <li><a href="#categories">Collections</a></li>
+    <li><a href="#collection">Men</a></li>
+    <li><a href="#collection">Women</a></li>
+    <li><a href="#lookbook">Lookbook</a></li>
+    <li><a href="#testimonials">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-icon" onclick="alert('Search feature — connect to your product database')">Search</button>
+    <button class="nav-icon" onclick="alert('Account — connect your auth system')">Account</button>
+    <button class="cart-btn" onclick="alert('Cart — connect to your e-commerce backend')">Bag (0)</button>
+    <button class="hamburger" onclick="openMobileNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">New Collection · SS 2050 · Pakistan</div>
+    <h1 class="hero-title">
+      L'<em>OMARE</em>
+    </h1>
+    <div class="hero-subtitle">Where Luxury Meets Identity</div>
+    <div class="hero-cta">
+      <a href="#collection" class="btn-primary">Shop Men</a>
+      <a href="#collection" class="btn-outline">Shop Women</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack">
+    <span>New Arrivals <span class="marquee-sep">✦</span></span>
+    <span>Luxury Craftsmanship <span class="marquee-sep">✦</span></span>
+    <span>Men's Collection <span class="marquee-sep">✦</span></span>
+    <span>Women's Collection <span class="marquee-sep">✦</span></span>
+    <span>Free Delivery in Pakistan <span class="marquee-sep">✦</span></span>
+    <span>Premium Fabrics <span class="marquee-sep">✦</span></span>
+    <span>L'OMARE.PK <span class="marquee-sep">✦</span></span>
+    <span>SS 2050 Season <span class="marquee-sep">✦</span></span>
+    <span>New Arrivals <span class="marquee-sep">✦</span></span>
+    <span>Luxury Craftsmanship <span class="marquee-sep">✦</span></span>
+    <span>Men's Collection <span class="marquee-sep">✦</span></span>
+    <span>Women's Collection <span class="marquee-sep">✦</span></span>
+    <span>Free Delivery in Pakistan <span class="marquee-sep">✦</span></span>
+    <span>Premium Fabrics <span class="marquee-sep">✦</span></span>
+    <span>L'OMARE.PK <span class="marquee-sep">✦</span></span>
+    <span>SS 2050 Season <span class="marquee-sep">✦</span></span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="section-label reveal">Shop by Category</div>
+  <h2 class="section-title reveal reveal-delay-1">Discover Our <em>World</em></h2>
+
+  <div class="cat-grid reveal reveal-delay-2">
+    <!-- MEN -->
+    <div class="cat-card">
+      <div class="cat-bg cat-bg-men">
+        <div class="cat-figure">♂</div>
+      </div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <span class="cat-tag">The Gentleman's Edit</span>
+        <div class="cat-name">Men's<br>Collection</div>
+        <a href="#collection" class="cat-link">Explore Now</a>
+      </div>
+    </div>
+
+    <!-- WOMEN -->
+    <div class="cat-card" style="grid-column: 2; grid-row: 1;">
+      <div class="cat-bg cat-bg-women">
+        <div class="cat-figure">♀</div>
+      </div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <span class="cat-tag">The Modern Woman</span>
+        <div class="cat-name">Women's<br>Collection</div>
+        <a href="#collection" class="cat-link">Explore Now</a>
+      </div>
+    </div>
+
+    <!-- ACCESSORIES -->
+    <div class="cat-card" style="grid-column: 3; grid-row: 1;">
+      <div class="cat-bg cat-bg-accessories">
+        <div class="cat-figure">◈</div>
+      </div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <span class="cat-tag">Finishing Touches</span>
+        <div class="cat-name">Accessories</div>
+        <a href="#collection" class="cat-link">Explore Now</a>
+      </div>
+    </div>
+
+    <!-- NEW ARRIVALS -->
+    <div class="cat-card" style="grid-column: 2 / span 2; grid-row: 2; height: 300px;">
+      <div class="cat-bg cat-bg-new" style="height:100%">
+        <div class="cat-figure" style="font-size:120px;letter-spacing:20px;color:rgba(201,169,110,0.06)">NEW ARRIVALS</div>
+      </div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <span class="cat-tag">SS 2050 Season</span>
+        <div class="cat-name" style="font-size:32px">Latest Drops</div>
+        <a href="#collection" class="cat-link">See New Arrivals</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED COLLECTION -->
+<section id="collection">
+  <div class="collection-header reveal">
+    <div>
+      <div class="section-label">Featured Products</div>
+      <h2 class="section-title" style="font-size:clamp(32px,5vw,60px)">This Season's <em>Finest</em></h2>
+    </div>
+    <a href="#" class="view-all-link">View All</a>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar reveal reveal-delay-1">
+    <button class="filter-btn active" onclick="filterProducts(this,'all')">All</button>
+    <button class="filter-btn" onclick="filterProducts(this,'men')">Men</button>
+    <button class="filter-btn" onclick="filterProducts(this,'women')">Women</button>
+    <button class="filter-btn" onclick="filterProducts(this,'new')">New In</button>
+    <button class="filter-btn" onclick="filterProducts(this,'sale')">Sale</button>
+  </div>
+
+  <div class="products-grid" id="productsGrid">
+    <!-- Product 1 -->
+    <div class="product-card reveal" data-cat="men">
+      <div class="product-img">
+        <span class="product-badge new-badge">New</span>
+        <div class="product-placeholder">
+          <div class="product-glyph">☽</div>
+        </div>
+        <div class="product-actions">
+          <button class="add-to-cart" onclick="addToCart('Classic Kurta')">Add to Bag</button>
+          <button class="wishlist-btn" onclick="this.textContent='♥'">♡</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">L'Omare Men</div>
+        <div class="product-name">Classic Embroidered<br>Kurta</div>
+        <div class="product-price-row">
+          <span class="product-price">PKR 8,500</span>
+        </div>
+        <div class="product-colors">
+          <div class="color-swatch" style="background:#1A1A1A" title="Black"></div>
+          <div class="color-swatch" style="background:#C9A96E" title="Gold"></div>
+          <div class="color-swatch" style="background:#F8F5F0" title="Ivory"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="product-card reveal reveal-delay-1" data-cat="women">
+      <div class="product-img">
+        <span class="product-badge">Bestseller</span>
+        <div class="product-placeholder">
+          <div class="product-glyph">✿</div>
+        </div>
+        <div class="product-actions">
+          <button class="add-to-cart" onclick="addToCart('Silk Anarkali')">Add to Bag</button>
+          <button class="wishlist-btn" onclick="this.textContent='♥'">♡</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">L'Omare Women</div>
+        <div class="product-name">Silk Embroidered<br>Anarkali</div>
+        <div class="product-price-row">
+          <span class="product-price">PKR 18,000</span>
+        </div>
+        <div class="product-colors">
+          <div class="color-swatch" style="background:#8B1A3A" title="Crimson"></div>
+          <div class="color-swatch" style="background:#1A2A3A" title="Navy"></div>
+          <div class="color-swatch" style="background:#2A1A08" title="Chocolate"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="product-card reveal reveal-delay-2" data-cat="men">
+      <div class="product-img">
+        <div class="product-placeholder">
+          <div class="product-glyph">⊞</div>
+        </div>
+        <div class="product-actions">
+          <button class="add-to-cart" onclick="addToCart('Linen Suit')">Add to Bag</button>
+          <button class="wishlist-btn" onclick="this.textContent='♥'">♡</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">L'Omare Men</div>
+        <div class="product-name">Premium Linen<br>3-Piece Suit</div>
+        <div class="product-price-row">
+          <span class="product-price">PKR 32,000</span>
+        </div>
+        <div class="product-colors">
+          <div class="color-swatch" style="background:#D8D0C0" title="Beige"></div>
+          <div class="color-swatch" style="background:#2A2A2A" title="Charcoal"></div>
+          <div class="color-swatch" style="background:#1A3020" title="Bottle Green"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 4 -->
+    <div class="product-card reveal reveal-delay-3" data-cat="women sale">
+      <div class="product-img">
+        <span class="product-badge sale-badge">Sale</span>
+        <div class="product-placeholder">
+          <div class="product-glyph">❋</div>
+        </div>
+        <div class="product-actions">
+          <button class="add-to-cart" onclick="addToCart('Lawn Suit')">Add to Bag</button>
+          <button class="wishlist-btn" onclick="this.textContent='♥'">♡</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">L'Omare Women</div>
+        <div class="product-name">Luxury Lawn<br>3-Piece Suit</div>
+        <div class="product-price-row">
+          <span class="product-price">PKR 5,500</span>
+          <span class="product-price-old">PKR 7,500</span>
+        </div>
+        <div class="product-colors">
+          <div class="color-swatch" style="background:#E8D5A3" title="Champagne"></div>
+          <div class="color-swatch" style="background:#A8C0B8" title="Sage"></div>
+          <div class="color-swatch" style="background:#D4B0B0" title="Rose"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 5 -->
+    <div class="product-card reveal" data-cat="men new">
+      <div class="product-img">
+        <span class="product-badge new-badge">New</span>
+        <div class="product-placeholder">
+          <div class="product-glyph">⧖</div>
+        </div>
+        <div class="product-actions">
+          <button class="add-to-cart" onclick="addToCart('Sherwani')">Add to Bag</button>
+          <button class="wishlist-btn" onclick="this.textContent='♥'">♡</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">L'Omare Formal</div>
+        <div class="product-name">Royal Sherwani<br>Set</div>
+        <div class="product-price-row">
+          <span class="product-price">PKR 65,000</span>
+        </div>
+        <div class="product-colors">
+          <div class="color-swatch" style="background:#0A0A14" title="Midnight Blue"></div>
+          <div class="color-swatch" style="background:#1A0A0A" title="Dark Maroon"></div>
+          <div class="color-swatch" style="background:#0A100A" title="Forest Green"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 6 -->
+    <div class="product-card reveal reveal-delay-1" data-cat="women new">
+      <div class="product-img">
+        <span class="product-badge new-badge">New</span>
+        <div class="product-placeholder">
+          <div class="product-glyph">♦</div>
+        </div>
+        <div class="product-actions">
+          <button class="add-to-cart" onclick="addToCart('Formal Gown')">Add to Bag</button>
+          <button class="wishlist-btn" onclick="this.textContent='♥'">♡</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">L'Omare Women</div>
+        <div class="product-name">Heritage Embroidered<br>Formal Gown</div>
+        <div class="product-price-row">
+          <span class="product-price">PKR 42,000</span>
+        </div>
+        <div class="product-colors">
+          <div class="color-swatch" style="background:#4A1A3A" title="Plum"></div>
+          <div class="color-swatch" style="background:#C9A96E" title="Gold"></div>
+          <div class="color-swatch" style="background:#F8F5F0" title="Ivory"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 7 -->
+    <div class="product-card reveal reveal-delay-2" data-cat="men sale">
+      <div class="product-img">
+        <span class="product-badge sale-badge">Sale</span>
+        <div class="product-placeholder">
+          <div class="product-glyph">◉</div>
+        </div>
+        <div class="product-actions">
+          <button class="add-to-cart" onclick="addToCart('Kameez Shalwar')">Add to Bag</button>
+          <button class="wishlist-btn" onclick="this.textContent='♥'">♡</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">L'Omare Men</div>
+        <div class="product-name">Premium Kameez<br>Shalwar</div>
+        <div class="product-price-row">
+          <span class="product-price">PKR 3,200</span>
+          <span class="product-price-old">PKR 4,500</span>
+        </div>
+        <div class="product-colors">
+          <div class="color-swatch" style="background:#F8F5F0" title="White"></div>
+          <div class="color-swatch" style="background:#E8D5A3" title="Cream"></div>
+          <div class="color-swatch" style="background:#B8C8D8" title="Sky Blue"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 8 -->
+    <div class="product-card reveal reveal-delay-3" data-cat="women">
+      <div class="product-img">
+        <div class="product-placeholder">
+          <div class="product-glyph">✶</div>
+        </div>
+        <div class="product-actions">
+          <button class="add-to-cart" onclick="addToCart('Bridal Set')">Add to Bag</button>
+          <button class="wishlist-btn" onclick="this.textContent='♥'">♡</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">L'Omare Bridal</div>
+        <div class="product-name">Signature Bridal<br>Collection Set</div>
+        <div class="product-price-row">
+          <span class="product-price">PKR 120,000</span>
+        </div>
+        <div class="product-colors">
+          <div class="color-swatch" style="background:#8B1A1A" title="Bridal Red"></div>
+          <div class="color-swatch" style="background:#C9A96E" title="Gold"></div>
+          <div class="color-swatch" style="background:#4A2A5A" title="Royal Purple"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOOKBOOK / BRAND STORY -->
+<div id="lookbook">
+  <div class="lookbook-visual reveal">
+    <div class="lookbook-pattern"></div>
+    <div class="lookbook-glyph">L</div>
+    <div class="lookbook-label">
+      <div class="lookbook-season">Spring / Summer 2050</div>
+      <div class="lookbook-title">The<br>Eternal<br>Collection</div>
+    </div>
+  </div>
+  <div class="lookbook-content">
+    <div class="section-label reveal">Our Story</div>
+    <h2 class="section-title reveal reveal-delay-1">Crafted for the<br><em>Modern Pakistani</em></h2>
+    <div class="gold-line reveal reveal-delay-2"></div>
+    <p class="lookbook-text reveal reveal-delay-2">
+      L'OMARE was born from a singular vision: to bring world-class luxury fashion to Pakistan, while honoring the rich heritage of South Asian craftsmanship. Every thread tells a story. Every stitch carries a legacy.
+    </p>
+    <div class="lookbook-stats reveal reveal-delay-3">
+      <div class="stat-item">
+        <div class="stat-num">12+</div>
+        <div class="stat-label">Years of<br>Craftsmanship</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Premium<br>Designs</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">50k+</div>
+        <div class="stat-label">Happy<br>Customers</div>
+      </div>
+    </div>
+    <a href="#collection" class="btn-primary reveal reveal-delay-4">Explore Lookbook</a>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-label reveal">Client Voices</div>
+  <h2 class="section-title reveal reveal-delay-1">What Our <em>Clients</em> Say</h2>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal">
+      <span class="quote-mark">"</span>
+      <p class="testimonial-text">The quality of L'OMARE's embroidery is unlike anything I've worn before. It feels like wearing art — every detail is absolutely perfect.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">SA</div>
+        <div>
+          <div class="author-name" style="color:var(--gold)">Sara Ahmed</div>
+          <div class="author-meta">Lahore, Pakistan</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-1">
+      <span class="quote-mark" style="color:var(--gold-dark)">"</span>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">Ordered my wedding sherwani from L'OMARE — received so many compliments. The fabric quality and fitting was absolutely superb.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" style="background:var(--gold-dark)">AK</div>
+        <div>
+          <div class="author-name">Ali Khan</div>
+          <div class="author-meta">Karachi, Pakistan</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-2">
+      <span class="quote-mark" style="color:var(--gold-dark)">"</span>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">Finally a Pakistani brand that matches international luxury standards. The lawn suits are breathtaking — I ordered three already.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" style="background:var(--gold-dark)">FM</div>
+        <div>
+          <div class="author-name">Fatima Malik</div>
+          <div class="author-meta">Islamabad, Pakistan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter">
+  <div class="newsletter-bg"></div>
+  <div class="newsletter-content">
+    <div class="section-label reveal" style="justify-content:center;text-align:center">Stay Connected</div>
+    <h2 class="newsletter-title reveal reveal-delay-1">
+      Join the <em>L'OMARE</em><br>Inner Circle
+    </h2>
+    <p class="newsletter-sub reveal reveal-delay-2">
+      Be the first to know about new collections, exclusive events,<br>and members-only offers. Pakistan's most refined fashion community.
+    </p>
+    <div class="newsletter-form reveal reveal-delay-3">
+      <input type="email" class="newsletter-input" placeholder="Your email address" id="emailInput">
+      <button class="newsletter-submit" onclick="subscribeNewsletter()">Subscribe</button>
+    </div>
+    <p class="newsletter-privacy reveal reveal-delay-4">We respect your privacy. Unsubscribe at any time.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#hero" class="nav-logo"><span>L'</span>OMARE<span style="font-size:10px;letter-spacing:2px;opacity:0.5">.PK</span></a>
+      <p class="footer-tagline">"Where heritage meets the future. Luxury fashion for the discerning Pakistani."</p>
+      <div class="social-links">
+        <a href="#" class="social-link" onclick="alert('Link your Instagram')">IN</a>
+        <a href="#" class="social-link" onclick="alert('Link your Facebook')">FB</a>
+        <a href="#" class="social-link" onclick="alert('Link your TikTok')">TK</a>
+        <a href="#" class="social-link" onclick="alert('Link your YouTube')">YT</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Shop</div>
+      <ul class="footer-links">
+        <li><a href="#collection">Men's Collection</a></li>
+        <li><a href="#collection">Women's Collection</a></li>
+        <li><a href="#collection">Bridal Wear</a></li>
+        <li><a href="#collection">Formal Collection</a></li>
+        <li><a href="#collection">Casual Wear</a></li>
+        <li><a href="#collection">Accessories</a></li>
+        <li><a href="#collection">Sale</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Help</div>
+      <ul class="footer-links">
+        <li><a href="#" onclick="alert('Add your size guide here')">Size Guide</a></li>
+        <li><a href="#" onclick="alert('Add your shipping policy here')">Shipping Info</a></li>
+        <li><a href="#" onclick="alert('Add your return policy here')">Returns & Exchange</a></li>
+        <li><a href="#" onclick="alert('Add your FAQ here')">FAQ</a></li>
+        <li><a href="#" onclick="alert('Add your care guide here')">Care Instructions</a></li>
+        <li><a href="#newsletter">Track Your Order</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Contact Us</div>
+      <div class="footer-contact">
+        <div class="contact-item">
+          <span class="contact-label">WhatsApp</span>
+          <span class="contact-val">+92 300 0000000</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Email</span>
+          <span class="contact-val">hello@lomare.pk</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Based in</span>
+          <span class="contact-val">Faisalabad, Pakistan</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Hours</span>
+          <span class="contact-val">Mon–Sat, 10am–8pm</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2050 L'OMARE.PK — All rights reserved.</div>
+    <ul class="footer-legal">
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Terms of Service</a></li>
+      <li><a href="#">Cookie Policy</a></li>
+    </ul>
+    <div class="footer-pk-flag">🇵🇰 Made with pride in Pakistan</div>
+  </div>
+</footer>
+
+<!-- CART TOAST -->
+<div id="cartToast" style="
+  position:fixed; bottom:40px; left:50%; transform:translateX(-50%) translateY(100px);
+  background:var(--gold); color:var(--black); padding:14px 32px;
+  font-size:10px; letter-spacing:3px; text-transform:uppercase; font-weight:500;
+  z-index:9000; transition:transform 0.4s ease; font-family:'Montserrat',sans-serif;
+  white-space:nowrap;
+">Added to bag</div>
+
+<script>
+  // LOADER
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hide');
+    }, 2500);
+  });
+
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  });
+
+  // NAV SCROLL
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // MOBILE NAV
+  function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
+  function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+  document.getElementById('mobileNav').querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', closeMobileNav);
+  });
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // PRODUCT FILTER
+  function filterProducts(btn, cat) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.product-card').forEach(card => {
+      const cats = card.dataset.cat || '';
+      if (cat === 'all' || cats.includes(cat)) {
+        card.style.display = '';
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          card.style.transition = 'opacity 0.4s, transform 0.4s';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 50);
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // ADD TO CART
+  let cartCount = 0;
+  function addToCart(name) {
+    cartCount++;
+    document.querySelector('.cart-btn').textContent = `Bag (${cartCount})`;
+    const toast = document.getElementById('cartToast');
+    toast.textContent = `${name} — Added to bag`;
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(() => {
+      toast.style.transform = 'translateX(-50%) translateY(100px)';
+    }, 2500);
+  }
+
+  // NEWSLETTER
+  function subscribeNewsletter() {
+    const email = document.getElementById('emailInput').value;
+    if (!email || !email.includes('@')) {
+      alert('Please enter a valid email address');
+      return;
+    }
+    alert(`Thank you for joining L'OMARE Inner Circle!\nWe'll be in touch at ${email}`);
+    document.getElementById('emailInput').value = '';
+  }
+
+  // SMOOTH ANCHOR SCROLL
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
